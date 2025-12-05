@@ -114,10 +114,13 @@ const InputGame = ({ isHidden, isReverse = false }: InputGameProps) => {
 
   const handleEnter = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === 'Enter' && inputValue.trim().length) {
-      if (
-        (isReverse && inputValue.trim() === targetChar) ||
-        (!isReverse && inputValue.trim().toLowerCase() === targetChar)
-      ) {
+      const trimmedInput = inputValue.trim();
+      const isCorrect = isReverse
+        ? trimmedInput === targetChar
+        : trimmedInput.toLowerCase() === targetChar ||
+          trimmedInput === correctChar;
+
+      if (isCorrect) {
         handleCorrectAnswer();
       } else {
         handleWrongAnswer();
