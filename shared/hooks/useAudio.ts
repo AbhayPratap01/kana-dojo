@@ -85,3 +85,34 @@ export const useLong = () => {
   const play = useAudioLoader('/sounds/long.wav', 0.2);
   return { playLong: play };
 };
+
+let christmasAudio: HTMLAudioElement | null = null;
+let savedTime = 0;
+
+export const useChristmas = () => {
+  if (typeof window !== 'undefined' && !christmasAudio) {
+    christmasAudio = new Audio('/sounds/mariah-carey.opus');
+    christmasAudio.loop = true;
+    christmasAudio.volume = 0.2;
+  }
+
+  const playChristmas = () => {
+    christmasAudio!.currentTime = savedTime;
+    christmasAudio!.play();
+  };
+
+  const pauseChristmas = () => {
+    if (christmasAudio) {
+      savedTime = christmasAudio.currentTime;
+      christmasAudio.pause();
+    }
+  };
+
+  const resetTimer = () => {
+    savedTime = 0;
+  };
+
+  const isPlaying = () => (christmasAudio ? !christmasAudio.paused : false);
+
+  return { playChristmas, pauseChristmas, isPlaying, resetTimer };
+};
