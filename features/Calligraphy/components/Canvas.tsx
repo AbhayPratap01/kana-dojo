@@ -40,7 +40,7 @@ const Canvas = () => {
   const addCompletedCharacter = useCalligraphyStore(
     state => state.addCompletedCharacter
   );
-  const setCurrentStage = useCalligraphyStore(state => state.setCurrentStage);
+  
 
   // Brush configurations
   const brushConfig: Record<
