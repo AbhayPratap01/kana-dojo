@@ -40,7 +40,6 @@ const Canvas = () => {
   const addCompletedCharacter = useCalligraphyStore(
     state => state.addCompletedCharacter
   );
-  
 
   // Brush configurations
   const brushConfig: Record<
@@ -504,11 +503,11 @@ const Canvas = () => {
   return (
     <div
       ref={containerRef}
-      className='relative w-full aspect-[4/3] bg-[var(--card-color)] rounded-xl border border-[var(--border-color)] overflow-hidden'
+      className='relative aspect-4/3 w-full overflow-hidden rounded-xl border border-(--border-color) bg-(--card-color)'
     >
       <canvas
         ref={canvasRef}
-        className='absolute inset-0 w-full h-full cursor-crosshair touch-none'
+        className='absolute inset-0 h-full w-full cursor-crosshair touch-none'
         onMouseDown={handlePointerDown}
         onMouseMove={handlePointerMove}
         onMouseUp={handlePointerUp}
@@ -519,8 +518,8 @@ const Canvas = () => {
       />
 
       {showGuide && currentStage === 'stroke' && currentGuideStroke && (
-        <div className='absolute bottom-3 left-3 pointer-events-none'>
-          <span className='px-2 py-1 rounded-lg bg-[var(--background-color)]/80 text-[var(--secondary-color)] text-xs backdrop-blur-sm'>
+        <div className='pointer-events-none absolute bottom-3 left-3'>
+          <span className='rounded-lg bg-(--background-color)/80 px-2 py-1 text-xs text-(--secondary-color) backdrop-blur-sm'>
             Start from <span className='text-green-500'>●</span> and follow the
             path
           </span>
@@ -528,16 +527,16 @@ const Canvas = () => {
       )}
 
       {currentStage === 'stroke' && currentGuideStroke && (
-        <div className='absolute top-3 right-3 pointer-events-none'>
-          <span className='px-2 py-1 rounded-lg bg-[var(--background-color)]/80 text-[var(--secondary-color)] text-xs backdrop-blur-sm'>
+        <div className='pointer-events-none absolute top-3 right-3'>
+          <span className='rounded-lg bg-(--background-color)/80 px-2 py-1 text-xs text-(--secondary-color) backdrop-blur-sm'>
             {currentGuideStroke.name}
           </span>
         </div>
       )}
 
       {currentStage === 'full' && (
-        <div className='absolute bottom-3 left-3 pointer-events-none'>
-          <span className='px-2 py-1 rounded-lg bg-[var(--background-color)]/80 text-[var(--secondary-color)] text-xs backdrop-blur-sm'>
+        <div className='pointer-events-none absolute bottom-3 left-3'>
+          <span className='rounded-lg bg-(--background-color)/80 px-2 py-1 text-xs text-(--secondary-color) backdrop-blur-sm'>
             Draw {totalStrokes} strokes from memory ({completedStrokes.length}/
             {totalStrokes})
           </span>
@@ -545,8 +544,8 @@ const Canvas = () => {
       )}
 
       {!isCurrentStrokeValid && isDrawing && (
-        <div className='absolute top-3 left-3 pointer-events-none'>
-          <span className='px-2 py-1 rounded-lg bg-red-100 text-red-600 text-xs border border-red-300 animate-pulse'>
+        <div className='pointer-events-none absolute top-3 left-3'>
+          <span className='animate-pulse rounded-lg border border-red-300 bg-red-100 px-2 py-1 text-xs text-red-600'>
             ✕ Off the path!
           </span>
         </div>

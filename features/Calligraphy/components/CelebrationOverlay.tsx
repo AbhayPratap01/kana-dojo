@@ -9,6 +9,7 @@ const CelebrationOverlay = () => {
   const setShowCelebration = useCalligraphyStore(
     state => state.setShowCelebration
   );
+  const setActiveStep = useCalligraphyStore(state => state.setActiveStep);
   const currentStage = useCalligraphyStore(state => state.currentStage);
   const setCurrentStage = useCalligraphyStore(state => state.setCurrentStage);
   const selectedCharacter = useCalligraphyStore(
@@ -93,14 +94,15 @@ const CelebrationOverlay = () => {
 
   const handleChooseOwn = () => {
     setShowCelebration(false);
+    setActiveStep(1);
   };
 
   return (
-    <div className='fixed inset-0 bg-black/40 backdrop-blur-sm flex items-center justify-center z-50'>
-      <div className='bg-[var(--card-color)] rounded-2xl p-8 max-w-sm mx-4 text-center shadow-2xl'>
-        <div className='w-16 h-16 mx-auto mb-4 bg-green-500 rounded-full flex items-center justify-center'>
+    <div className='fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-sm'>
+      <div className='mx-4 max-w-sm rounded-2xl bg-(--card-color) p-8 text-center shadow-2xl'>
+        <div className='mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-green-500'>
           <svg
-            className='w-8 h-8 text-white'
+            className='h-8 w-8 text-white'
             fill='none'
             stroke='currentColor'
             viewBox='0 0 24 24'
@@ -114,16 +116,16 @@ const CelebrationOverlay = () => {
           </svg>
         </div>
 
-        <h2 className='text-xl font-bold text-[var(--main-color)] mb-2'>
+        <h2 className='mb-2 text-xl font-bold text-(--main-color)'>
           {isSelfPracticeComplete ? 'Amazing!' : 'Great Work!'}
         </h2>
 
-        <p className='text-[var(--secondary-color)] mb-1'>
+        <p className='mb-1 text-(--secondary-color)'>
           {isStrokePracticeComplete ? (
             'All strokes completed!'
           ) : (
             <>
-              <span className='text-4xl font-japanese text-[var(--main-color)] block my-2'>
+              <span className='font-japanese my-2 block text-4xl text-(--main-color)'>
                 {selectedCharacter?.character}
               </span>
               Character mastered!
@@ -131,17 +133,15 @@ const CelebrationOverlay = () => {
           )}
         </p>
 
-        <p className='text-[var(--main-color)] text-sm mb-4'>
+        <p className='mb-4 text-sm text-(--main-color)'>
           よくできました！{' '}
-          <span className='text-[var(--secondary-color)] text-xs'>
-            (Well done!)
-          </span>
+          <span className='text-xs text-(--secondary-color)'>(Well done!)</span>
         </p>
 
         <div className='space-y-2'>
           <button
             onClick={handleNext}
-            className='w-full py-3 bg-[var(--main-color)] text-white font-semibold rounded-xl hover:opacity-90 transition-opacity flex items-center justify-center gap-2'
+            className='flex w-full items-center justify-center gap-2 rounded-xl bg-(--main-color) py-3 font-semibold text-white transition-opacity hover:opacity-90'
           >
             {isStrokePracticeComplete
               ? 'Practice Without Guide →'
@@ -151,7 +151,7 @@ const CelebrationOverlay = () => {
           {isSelfPracticeComplete && (
             <button
               onClick={handleChooseOwn}
-              className='w-full py-2 bg-[var(--background-color)] text-[var(--secondary-color)] rounded-xl hover:text-[var(--main-color)] transition-colors'
+              className='w-full rounded-xl bg-(--background-color) py-2 text-(--secondary-color) transition-colors hover:text-(--main-color)'
             >
               Choose Different Character
             </button>
