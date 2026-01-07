@@ -836,9 +836,15 @@ const baseThemeSets: BaseThemeGroup[] = [
       },
       {
         id: 'morion',
-        backgroundColor: 'oklch(20.0% 0.054 255.0 / 1)',    
-        mainColor: 'oklch(92.5% 0.190 130.0 / 1)',           
-        secondaryColor: 'oklch(84.0% 0.140 85.0 / 1)',       
+        backgroundColor: 'oklch(20.0% 0.054 255.0 / 1)',
+        mainColor: 'oklch(92.5% 0.190 130.0 / 1)',
+        secondaryColor: 'oklch(84.0% 0.140 85.0 / 1)',
+      },
+      {
+        id: 'shigure',
+        backgroundColor: 'oklch(26.2% 0.050 132.0 / 1)',    // deep slate moss
+        mainColor: 'oklch(88.5% 0.160 300.0 / 1)',           // frost violet
+        secondaryColor: 'oklch(76.0% 0.170 35.0 / 1)',       // persimmon spice
       }
     ]
   },
