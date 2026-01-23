@@ -143,21 +143,27 @@ input[type='checkbox']:focus-visible {
   }
 }
 
-/* Legacy browsers with `::-webkit-scrollbar-*` support */
-@supports selector(::-webkit-scrollbar) {
-  [data-scroll-restoration-id='container']::-webkit-scrollbar-thumb,
-  #modal-scroll::-webkit-scrollbar-thumb {
-    background: var(--scrollbar-color-thumb);
-  }
-  [data-scroll-restoration-id='container']::-webkit-scrollbar-track,
-  #modal-scroll::-webkit-scrollbar-track {
-    background: var(--scrollbar-color-track);
-  }
-  [data-scroll-restoration-id='container']::-webkit-scrollbar,
-  #modal-scroll::-webkit-scrollbar {
-    max-width: var(--scrollbar-width-legacy);
-    max-height: var(--scrollbar-width-legacy);
-  }
+/* Custom Scrollbar Utilities */
+.scrollbar-none::-webkit-scrollbar {
+  display: none;
+}
+.scrollbar-none {
+  -ms-overflow-style: none; /* IE and Edge */
+  scrollbar-width: none; /* Firefox */
+}
+
+.scrollbar-thin::-webkit-scrollbar {
+  width: 4px;
+}
+.scrollbar-thin::-webkit-scrollbar-track {
+  background: transparent;
+}
+.scrollbar-thin::-webkit-scrollbar-thumb {
+  background: var(--border-color);
+  border-radius: 10px;
+}
+.scrollbar-thin::-webkit-scrollbar-thumb:hover {
+  background: var(--secondary-color);
 }
 
 /* @media (prefers-color-scheme: light) {
