@@ -42,6 +42,19 @@ interface ThemeCardProps {
   onClick: (id: string) => void;
 }
 
+const CHAOS_THEME_GRADIENT = `linear-gradient(
+  142deg,
+  oklch(66.0% 0.18 25.0 / 1) 0%,
+  oklch(72.0% 0.22 80.0 / 1) 12%,
+  oklch(68.0% 0.20 145.0 / 1) 24%,
+  oklch(70.0% 0.19 200.0 / 1) 36%,
+  oklch(67.0% 0.18 235.0 / 1) 48%,
+  oklch(73.0% 0.22 290.0 / 1) 60%,
+  oklch(69.0% 0.21 330.0 / 1) 74%,
+  oklch(74.0% 0.20 355.0 / 1) 88%,
+  oklch(66.0% 0.18 25.0 / 1) 100%
+)`;
+
 const ThemeCard = memo(function ThemeCard({
   theme,
   isSelected,
@@ -49,12 +62,18 @@ const ThemeCard = memo(function ThemeCard({
 }: ThemeCardProps) {
   const [isHovered, setIsHovered] = useState(false);
   const themeName = theme.id.replaceAll('-', ' ');
+  const isChaosTheme = theme.id === '?';
+  const background = isChaosTheme
+    ? CHAOS_THEME_GRADIENT
+    : isHovered
+      ? theme.cardColor
+      : theme.backgroundColor;
 
   return (
     <div
       className='cursor-pointer rounded-lg p-3'
       style={{
-        backgroundColor: isHovered ? theme.cardColor : theme.backgroundColor,
+        background,
         border: isSelected
           ? `1px solid ${theme.mainColor}`
           : `1px solid ${theme.borderColor}`,
@@ -64,10 +83,25 @@ const ThemeCard = memo(function ThemeCard({
       onClick={() => onClick(theme.id)}
     >
       <div className='mb-2'>
-        <span className='text-sm capitalize' style={{ color: theme.mainColor }}>
-          {isSelected && '\u2B24 '}
-          {themeName}
-        </span>
+        {isChaosTheme ? (
+          <span className='relative flex items-center justify-center text-sm text-white capitalize'>
+            <span
+              className='absolute left-1/2 -translate-x-1/2'
+              style={{ color: isSelected ? '#000' : 'transparent' }}
+            >
+              {'\u2B24'}
+            </span>
+            <span className='opacity-0'>?</span>
+          </span>
+        ) : (
+          <span
+            className='text-sm capitalize'
+            style={{ color: theme.mainColor }}
+          >
+            {isSelected && '\u2B24 '}
+            {themeName}
+          </span>
+        )}
       </div>
       <div className='flex gap-1.5'>
         <div
