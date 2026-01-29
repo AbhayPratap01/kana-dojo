@@ -80,5 +80,16 @@
     "difficulty": "easy",
     "answers": ["Sumo", "Kendo", "Judo", "Aikido"],
     "correctIndex": 0
-  }
+  },
+  {
+  "question": "What is the Japanese term for cherry blossoms?",
+  "difficulty": "easy",
+  "answers": [
+    "Sakura",
+    "Ume",
+    "Momiji",
+    "Kiku"
+  ],
+  "correctIndex": 0
+}
 ]
