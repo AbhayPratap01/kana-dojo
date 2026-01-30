@@ -2,6 +2,9 @@
   "title": "Welcome to KanaDojo!",
   "subtitle": "Let's personalize your learning experience",
   "steps": {
+    "welcome": {
+      "demoCta": "Jump into the Demo"
+    },
     "behavior": {
       "title": "Configure Behavior",
       "subtitle": "Set your display and sound preferences",
@@ -21,7 +24,9 @@
     "themes": {
       "title": "Choose Your Theme",
       "subtitle": "Select a theme that matches your style",
-      "randomTheme": "Random Theme"
+      "randomTheme": "Random Theme",
+      "moreInfo": "💡 More themes available in",
+      "preferences": "Preferences"
     },
     "fonts": {
       "title": "Choose Your Font",

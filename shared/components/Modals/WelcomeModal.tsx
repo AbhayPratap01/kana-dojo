@@ -3,28 +3,16 @@
 import { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import clsx from 'clsx';
-import {
-  X,
-  Palette,
-  Type,
-  ChevronRight,
-  ChevronLeft,
-  AudioLines,
-  VolumeX,
-  Joystick,
-  Dice5,
-} from 'lucide-react';
+import { X, Palette, Type, ChevronRight, ChevronLeft } from 'lucide-react';
+import { useRouter } from 'next/navigation';
 import { usePathname } from 'next/navigation';
 import { useTranslations } from 'next-intl';
 import useOnboardingStore from '@/shared/store/useOnboardingStore';
-import {
-  themeSets,
-  useAudioPreferences,
-  useThemePreferences,
-} from '@/features/Preferences';
+import { themeSets, useThemePreferences } from '@/features/Preferences';
 import { useClick } from '@/shared/hooks/useAudio';
-import { buttonBorderStyles, cardBorderStyles } from '@/shared/lib/styles';
+import { cardBorderStyles } from '@/shared/lib/styles';
 import { modalFonts } from '@/shared/components/Modals/data/modalFonts';
+import { ActionButton } from '@/shared/components/ui/ActionButton';
 
 const CHAOS_THEME_GRADIENT = `linear-gradient(
   142deg,
@@ -43,15 +31,16 @@ const WelcomeModal = () => {
   const t = useTranslations('welcome');
   const { playClick } = useClick();
   const pathname = usePathname();
+  const router = useRouter();
   const contentRef = useRef<HTMLDivElement>(null);
   const hasSeenWelcome = useOnboardingStore(state => state.hasSeenWelcome);
   const setHasSeenWelcome = useOnboardingStore(
     state => state.setHasSeenWelcome,
   );
 
-  const [step, setStep] = useState<
-    'welcome' | 'behavior' | 'themes' | 'fonts' | 'complete'
-  >('welcome');
+  const [step, setStep] = useState<'welcome' | 'themes' | 'fonts' | 'complete'>(
+    'welcome',
+  );
   const [isVisible, setIsVisible] = useState(false);
 
   const {
@@ -59,16 +48,10 @@ const WelcomeModal = () => {
     setTheme: setSelectedTheme,
     font: currentFont,
     setFont,
-    displayKana,
-    setDisplayKana,
   } = useThemePreferences();
-
-  const { silentMode, setSilentMode } = useAudioPreferences();
 
   const [localTheme, setLocalTheme] = useState(selectedTheme);
   const [localFont, setLocalFont] = useState(currentFont);
-  const [localDisplayKana, setLocalDisplayKana] = useState(displayKana);
-  const [localSilentMode, setLocalSilentMode] = useState(silentMode);
 
   useEffect(() => {
     const isDev = process.env.NODE_ENV === 'development';
@@ -92,9 +75,7 @@ const WelcomeModal = () => {
   useEffect(() => {
     setLocalTheme(selectedTheme);
     setLocalFont(currentFont);
-    setLocalDisplayKana(displayKana);
-    setLocalSilentMode(silentMode);
-  }, [selectedTheme, currentFont, displayKana, silentMode]);
+  }, [selectedTheme, currentFont]);
 
   useEffect(() => {
     // Reset scroll position when step changes
@@ -123,8 +104,6 @@ const WelcomeModal = () => {
   const handleNext = () => {
     playClick();
     if (step === 'welcome') {
-      setStep('behavior');
-    } else if (step === 'behavior') {
       setStep('themes');
     } else if (step === 'themes') {
       setStep('fonts');
@@ -141,8 +120,6 @@ const WelcomeModal = () => {
     if (step === 'fonts') {
       setStep('themes');
     } else if (step === 'themes') {
-      setStep('behavior');
-    } else if (step === 'behavior') {
       setStep('welcome');
     }
   };
@@ -165,21 +142,6 @@ const WelcomeModal = () => {
             </div>
 
             <div className='space-y-4 text-left'>
-              <div className='flex items-center gap-3 rounded-lg bg-[var(--background-color)] p-3'>
-                <Joystick
-                  className='flex-shrink-0 text-[var(--main-color)]'
-                  size={24}
-                />
-                <div>
-                  <h3 className='font-semibold text-[var(--main-color)]'>
-                    {t('features.behavior.title')}
-                  </h3>
-                  <p className='text-sm text-[var(--secondary-color)]'>
-                    {t('features.behavior.description')}
-                  </p>
-                </div>
-              </div>
-
               <div className='flex items-center gap-3 rounded-lg bg-[var(--background-color)] p-3'>
                 <Palette
                   className='flex-shrink-0 text-[var(--main-color)]'
@@ -209,11 +171,22 @@ const WelcomeModal = () => {
                   </p>
                 </div>
               </div>
+
+              <ActionButton
+                className='py-4 text-xl'
+                borderRadius='3xl'
+                borderBottomThickness={8}
+                onClick={() => {
+                  playClick();
+                  router.push('/demo');
+                }}
+              >
+                {t('steps.welcome.demoCta')}
+              </ActionButton>
             </div>
           </div>
         );
-
-      case 'behavior':
+      /* case 'behavior':
         return (
           <div className='space-y-6'>
             <div className='space-y-2 text-center'>
@@ -346,7 +319,7 @@ const WelcomeModal = () => {
               </div>
             </div>
           </div>
-        );
+        ); */
 
       case 'themes':
         return (
@@ -359,31 +332,6 @@ const WelcomeModal = () => {
               <p className='text-[var(--secondary-color)]'>
                 {t('steps.themes.subtitle')}
               </p>
-            </div>
-
-            <div className='mb-4'>
-              <button
-                className={clsx(
-                  'w-full cursor-pointer rounded-lg border-2 border-black/30 p-3 transition-colors duration-200',
-                  'hover:border-[var(--main-color)] hover:bg-[var(--background-color)]',
-                  buttonBorderStyles,
-                  'flex items-center justify-center gap-2 text-[var(--main-color)]',
-                )}
-                onClick={() => {
-                  playClick();
-                  const darkThemes =
-                    themeSets.find(set => set.name === 'Dark')?.themes || [];
-                  if (darkThemes.length > 0) {
-                    const randomTheme =
-                      darkThemes[Math.floor(Math.random() * darkThemes.length)];
-                    setLocalTheme(randomTheme.id);
-                    setSelectedTheme(randomTheme.id);
-                  }
-                }}
-              >
-                <Dice5 className='text-[var(--secondary-color)]' />
-                {t('steps.themes.randomTheme')}
-              </button>
             </div>
 
             <div className='max-h-96 space-y-6 overflow-y-auto px-1'>
@@ -507,6 +455,12 @@ const WelcomeModal = () => {
                   );
                 })}
             </div>
+            <div className='rounded-lg bg-[var(--secondary-color)] p-3 text-center'>
+              <p className='text-sm text-[var(--background-color)]'>
+                {t('steps.themes.moreInfo')}{' '}
+                <strong>{t('steps.themes.preferences')}</strong>
+              </p>
+            </div>
           </div>
         );
 
@@ -521,27 +475,6 @@ const WelcomeModal = () => {
               <p className='text-[var(--secondary-color)]'>
                 {t('steps.fonts.subtitle')}
               </p>
-            </div>
-
-            <div className='mb-4'>
-              <button
-                className={clsx(
-                  'w-full cursor-pointer rounded-lg border-2 border-black/30 p-3 transition-colors duration-200',
-                  'hover:border-[var(--main-color)] hover:bg-[var(--background-color)]',
-                  buttonBorderStyles,
-                  'flex items-center justify-center gap-2 text-[var(--main-color)]',
-                )}
-                onClick={() => {
-                  playClick();
-                  const randomFont =
-                    modalFonts[Math.floor(Math.random() * modalFonts.length)];
-                  setLocalFont(randomFont.name);
-                  setFont(randomFont.name);
-                }}
-              >
-                <Dice5 className='text-[var(--secondary-color)]' />
-                {t('steps.fonts.randomFont')}
-              </button>
             </div>
 
             <div className='scrollbar-thin scrollbar-thumb-[var(--border-color)] scrollbar-track-transparent max-h-80 space-y-4 overflow-y-auto p-1 pr-2'>
@@ -582,8 +515,8 @@ const WelcomeModal = () => {
                   </button>
                 ))}
               </div>
-              <div className='mt-4 rounded-lg bg-[var(--background-color)] p-3 text-center'>
-                <p className='text-sm text-[var(--secondary-color)]'>
+              <div className='mt-4 rounded-lg bg-[var(--secondary-color)] p-3 text-center'>
+                <p className='text-sm text-[var(--background-color)]'>
                   {t('steps.fonts.moreInfo')}{' '}
                   <strong>{t('steps.fonts.preferences')}</strong>
                 </p>
@@ -658,26 +591,16 @@ const WelcomeModal = () => {
                   className='flex gap-1'
                   role='progressbar'
                   aria-valuenow={
-                    [
-                      'welcome',
-                      'behavior',
-                      'themes',
-                      'fonts',
-                      'complete',
-                    ].indexOf(step) + 1
+                    ['welcome', 'themes', 'fonts', 'complete'].indexOf(step) + 1
                   }
-                  aria-valuemax={5}
+                  aria-valuemax={4}
                 >
-                  {['welcome', 'behavior', 'themes', 'fonts', 'complete'].map(
+                  {['welcome', 'themes', 'fonts', 'complete'].map(
                     (stepName, index) => {
                       const isActive =
-                        [
-                          'welcome',
-                          'behavior',
-                          'themes',
-                          'fonts',
-                          'complete',
-                        ].indexOf(step) >= index;
+                        ['welcome', 'themes', 'fonts', 'complete'].indexOf(
+                          step,
+                        ) >= index;
                       return (
                         <div
                           key={stepName}
